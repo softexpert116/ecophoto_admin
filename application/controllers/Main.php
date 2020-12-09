@@ -20,7 +20,7 @@ class Main extends CI_Controller
     function redirect_by_user_type()
     {
     	if ($_SESSION[S_SITE][S_DATA]['type'] == ADMIN) {
-    		redirect('/admin');
+    		redirect('/admin/dashboard');
     	} else {
     		redirect('/user');
     	}

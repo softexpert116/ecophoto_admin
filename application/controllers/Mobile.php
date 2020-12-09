@@ -56,4 +56,3 @@
 			echo json_encode(array('status' => $status, 'data' => $out_array));
         }
    }
-?>

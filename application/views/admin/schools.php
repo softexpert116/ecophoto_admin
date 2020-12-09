@@ -1,9 +1,9 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>/assets/backend/mybuild/css/intlTelInput.css">
-  <link rel="stylesheet" href="<?php echo base_url(); ?>/assets/backend/mybuild/css/demo.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>/assets/backend/mybuild/css/demo.css">
 
 				<section role="main" class="content-body">
 					<header class="page-header">
-						<h2>Users</h2>
+						<h2>Schools</h2>
 					
 					</header>
 

@@ -12,6 +12,10 @@ class Admin extends CI_Controller
 
     function index()
     {
+        $this->dashboard();
+    }
+
+    function dashboard() {
         $this->go_dashboard();
     }
 
@@ -191,6 +195,13 @@ class Admin extends CI_Controller
     function delete_school_student() {
         $s_id = $_REQUEST['s_id'];
         echo ($this->model->delete_school_student($s_id));
+    }
+
+    // photo comparison
+    function compare_photo() {
+        $id = $_REQUEST['id'];
+        $checked_value = $_REQUEST['checked'];
+        echo ($this->model->check_photo($id, $checked_value));
     }
 
     function delete_item($table, $id)

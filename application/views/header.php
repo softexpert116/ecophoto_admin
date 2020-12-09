@@ -109,7 +109,7 @@
 							<nav id="menu" class="nav-main" role="navigation">
 								<ul class="nav nav-main">
 									<li <?php if ($page == 'dashboard') echo 'class="nav-active"'; ?>>
-										<a href="<?php echo base_url().$_SESSION[S_SITE][S_DATA]['type'];?>">
+										<a href="<?php echo base_url();?>admin/dashboard">
 											<i class="fa fa-home" aria-hidden="true"></i>
 											<span>Dashboard</span>
 										</a>
@@ -133,10 +133,10 @@
 									<li <?php if ($page == 'students') echo 'class="nav-active"'; ?>>
 										<a href="<?php echo base_url().$_SESSION[S_SITE][S_DATA]['type'];?>/go_students">
 											<i class="fa fa-copy" aria-hidden="true"></i>
-											<span>Students</span>
+											<span>Uploaded Photos</span>
 										</a>
 									</li>
-									<li <?php if ($page == 'accounts') echo 'class="nav-active"'; ?>>
+									<li <?php if ($page == 'api') echo 'class="nav-active"'; ?>>
 										<a href="<?php echo base_url().$_SESSION[S_SITE][S_DATA]['type'];?>/go_api">
 											<i class="fa fa-share" aria-hidden="true"></i>
 											<span>API</span>

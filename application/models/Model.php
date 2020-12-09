@@ -11,27 +11,6 @@ class Model extends CI_Model
         // $this->load->library('encrypt');
     }
 
-    function get_student($student_id, &$out_array) {
-        $result = $this->db->get_where('tbl_student', array('student_id' => $student_id))->result_array();
-        if (count($result)== 0) {
-            $out_array = "Invalid student_id";
-            return 400;
-        }
-        $out_array = $result[0]; 
-        unset($out_array['id']);
-        unset($out_array['user_id']);
-        return 200;
-	}
-	function get_students_school($school_code, &$out_array) {
-        $result = $this->db->get_where('tbl_student', array('school_code' => $school_code))->result_array();
-        if (count($result)== 0) {
-            $out_array = "Invalid school_code";
-            return 400;
-        }
-        $out_array = $result; 
-        return 200;
-    }
-
     function check_info($student_id, $school_code)
     {
         $result = $this->db->get_where('tbl_schools', array('code' => $school_code, 'deleted' => 0))->result_array();
@@ -42,6 +21,28 @@ class Model extends CI_Model
         if (count($result)== 0) {
             return 300;
         }
+        return 200;
+    }
+
+    function get_student($student_id, &$out_array) {
+        $result = $this->db->get_where('tbl_student', array('student_id' => $student_id))->result_array();
+        if (count($result)== 0) {
+            $out_array = "Invalid student_id";
+            return 400;
+        }
+        $out_array = $result[0]; 
+        unset($out_array['id']);
+        unset($out_array['user_id']);
+        return 200;
+    }
+
+	function get_students_school($school_code, &$out_array) {
+        $result = $this->db->get_where('tbl_student', array('school_code' => $school_code))->result_array();
+        if (count($result)== 0) {
+            $out_array = "Invalid school_code";
+            return 400;
+        }
+        $out_array = $result; 
         return 200;
     }
 
@@ -111,13 +112,14 @@ class Model extends CI_Model
     }
 
     function add_student($in_array) {
-        $result = $this->db->get_where('tbl_student', array('student_id' => $in_array['student_id']))->result_array();
-        if (count($result) > 0) {
-            $this->db->where('student_id', $in_array['student_id']);
-            $this->db->update('tbl_student', $in_array);
-        } else {
-            $this->db->insert('tbl_student', $in_array);
-        }
+        // $result = $this->db->get_where('tbl_student', array('student_id' => $in_array['student_id']))->result_array();
+        // if (count($result) > 0) {
+        //     $this->db->where('student_id', $in_array['student_id']);
+        //     $this->db->update('tbl_student', $in_array);
+        // } else {
+            
+        // }
+        $this->db->insert('tbl_student', $in_array);
         return 200;
     }
 
@@ -128,11 +130,11 @@ class Model extends CI_Model
 	function get_student_total_array_by_school(&$data)
     {
         $student_array = array(); $school_array = array();
-        $result = $this->db->get('tbl_student')->result_array();
+        $result = $this->db->get('tbl_school_students')->result_array();
         for ($i=0; $i < count($result); $i++) { 
             if (!in_array($result[$i]['school_code'], $school_array)) {
                 array_push($school_array, $result[$i]['school_code']);
-                $result1 = $this->db->get_where('tbl_student', array('school_code' => $result[$i]['school_code']))->result_array();
+                $result1 = $this->db->get_where('tbl_school_students', array('school_code' => $result[$i]['school_code'], 'deleted' => 0))->result_array();
                 array_push($student_array, count($result1));
             }
         }
@@ -270,7 +272,8 @@ class Model extends CI_Model
         $this->db->order_by('id', 'DESC');
     	$data['data'] = $this->db->get_where('tbl_student', array('deleted' => 0))->result_array();
     	for ($i=0; $i < count($data['data']); $i++) {
-			$data['data'][$i]['user'] = $this->db->get_where('tbl_user', array('id' => $data['data'][$i]['user_id'], 'deleted' => 0))->result_array()[0]['name'];
+            $data['data'][$i]['user'] = $this->db->get_where('tbl_user', array('id' => $data['data'][$i]['user_id'], 'deleted' => 0))->result_array()[0]['name'];
+            $data['data'][$i]['standard_img'] = $this->db->get_where('tbl_school_students', array('student_id' => $data['data'][$i]['student_id'], 'deleted' => 0))->result_array()[0]['photo'];
     	}
     	return 200;    	
     }
@@ -452,9 +455,9 @@ class Model extends CI_Model
     function delete_item($table, $id)
     {
 		if ($table == "tbl_student") {
-			$student = $this->db->get_where($table, array('id' => $id))->result_array()[0];
-			$this->db->delete('tbl_student', array('id' => $id));
-			unlink(FCPATH."uploads/".$student['path']);
+            $student = $this->db->get_where($table, array('id' => $id))->result_array()[0];
+            $this->db->delete('tbl_student', array('id' => $id));
+			unlink(base_url("uploads/".$student['path']));
 			return;
 		}
     	$this->db->where('id', $id);
@@ -594,6 +597,12 @@ class Model extends CI_Model
         if (count($result) > 0)
             return "dupulicated";
         return "ok";
+    }
+
+    function check_photo($id, $checked_value) {
+        $this->db->where('id', $id);
+		$this->db->update('tbl_student', array('checked' => $checked_value));
+		return 200;
     }
 }
 
